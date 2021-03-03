@@ -2,12 +2,12 @@ name: "Notify Release to Slack"
 author: "Fede Calendino"
 description: "Notify a slack channel about a new release"
 inputs:
-  SLACK_WEBHOOK_URL:
+  slack_webhook_url:
     description: "URL provided by Slack's Incoming WebHooks app"
     required: true
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: python
+  main: main.py
 branding:
   icon: 'package'
   color: 'green'
