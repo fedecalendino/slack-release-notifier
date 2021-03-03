@@ -1,0 +1,13 @@
+name: "Notify Release to Slack"
+author: "Fede Calendino"
+description: "Notify a slack channel about a new release"
+inputs:
+  SLACK_WEBHOOK_URL:
+    description: "URL provided by Slack's Incoming WebHooks app"
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+branding:
+  icon: 'package'
+  color: 'green'
