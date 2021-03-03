@@ -6,8 +6,8 @@ inputs:
     description: "URL provided by Slack's Incoming WebHooks app"
     required: true
 runs:
-  using: python
-  main: main.py
+  using: "docker"
+  image: "Dockerfile"
 branding:
   icon: 'package'
   color: 'green'
