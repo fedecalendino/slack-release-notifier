@@ -5,8 +5,8 @@ inputs:
   slack_webhook_url:
     description: "URL provided by Slack's Incoming WebHooks app."
     required: true
-  pypi_project_url:
-    description: "URL of the project in pypi.org. If present a link to it will be added in the notification."
+  pypi_project_name:
+    description: "Name of the project in pypi.org. If present a link to it will be provided by the notification."
     required: false
 runs:
   using: "docker"
