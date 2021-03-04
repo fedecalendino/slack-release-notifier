@@ -20,7 +20,7 @@ def main():
 
     text = TEXT_FORMAT.format(name=project_name.upper(), version=project_version, user=github_actor)
     
-    if pypi_project_url:
+    if pypi_project_name:
         emoji = "pypi"
         url = PYPI_URL_FORMAT.format(project_name=pypi_project_name)
     else:
