@@ -2,12 +2,14 @@ import os
 import requests
 
 TEXT_FORMAT = "*{name}*: new version _{version}_ was released by {user}."
-GITHUB_URL_FORMAT = "https://github.com/{repository}/releases/tag/{version}"
 
+GITHUB_URL_FORMAT = "https://github.com/{repository}/releases/tag/{version}"
+PYPI_URL_FORMAT = "https://pypi.org/project/{project_name}/"
+    
 
 def main():
     slack_webhook_url = os.environ["INPUT_SLACK_WEBHOOK_URL"]
-    pypi_project_url = os.environ["INPUT_PYPI_PROJECT_URL"]
+    pypi_project_name = os.environ["INPUT_PYPI_PROJECT_NAME"]
     
     github_repository = os.environ["GITHUB_REPOSITORY"]
     github_ref = os.environ["GITHUB_REF"]
@@ -20,7 +22,7 @@ def main():
     
     if pypi_project_url:
         emoji = "pypi"
-        url = pypi_project_url
+        url = PYPI_URL_FORMAT.format(project_name=pypi_project_name)
     else:
         emoji = "github"
         url = GITHUB_URL_FORMAT.format(repository=github_repository, version=project_version)
