@@ -12,5 +12,5 @@ runs:
   using: "docker"
   image: "Dockerfile"
 branding:
-  icon: 'package'
-  color: 'green'
+  icon: "package"
+  color: "green"
