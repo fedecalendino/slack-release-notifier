@@ -1,6 +1,7 @@
 import os
 import requests
 
+SUMMARY_FORMAT = "{name}: new version {version} was released by {user}."
 TEXT_FORMAT = "*{name}*: new version _{version}_ was released by {user}."
 
 GITHUB_URL_FORMAT = "https://github.com/{repository}/releases/tag/{version}"
@@ -18,18 +19,34 @@ def main():
     project_name = github_repository.split("/")[-1]
     project_version = github_ref.split("/")[-1]
 
-    text = TEXT_FORMAT.format(name=project_name.upper(), version=project_version, user=github_actor)
+    summary = SUMMARY_FORMAT.format(
+        name=project_name.upper(), 
+        version=project_version, 
+        user=github_actor,
+    )
+    
+    text = TEXT_FORMAT.format(
+        name=project_name.upper(), 
+        version=project_version, 
+        user=github_actor,
+    )
     
     if pypi_project_name:
         emoji = "pypi"
-        url = PYPI_URL_FORMAT.format(project_name=pypi_project_name)
+        url = PYPI_URL_FORMAT.format(
+            project_name=pypi_project_name,
+        )
     else:
         emoji = "github"
-        url = GITHUB_URL_FORMAT.format(repository=github_repository, version=project_version)
+        url = GITHUB_URL_FORMAT.format(
+            repository=github_repository, 
+            version=project_version,
+        )
     
     requests.post(
         slack_webhook_url,
         json={
+            "text": summary,
             "blocks": [
                 {
                     "type": "section",
