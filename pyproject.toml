@@ -3,15 +3,15 @@ name = "slack-release-notifier"
 description = "Notify a slack channel about a new release."
 license = "MIT"
 readme = "README.md"
-version = "2.0.0"
+version = "2.1.0"
 
 authors = [
     "Fede Calendino <fede@calendino.com>"
 ]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-slack-hooks = "0.3.0"
+python = "^3.8"
+slack-hooks = "0.4.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.8.0"

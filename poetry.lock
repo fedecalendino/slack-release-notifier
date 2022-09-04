@@ -12,6 +12,7 @@ mypy-extensions = ">=0.4.3"
 pathspec = ">=0.9.0"
 platformdirs = ">=2"
 tomli = {version = ">=1.1.0", markers = "python_full_version < \"3.11.0a7\""}
+typing-extensions = {version = ">=3.10.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -113,7 +114,7 @@ use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "slack-hooks"
-version = "0.3.0"
+version = "0.4.0"
 description = "Slack client for webhooks with Block Kit builder."
 category = "main"
 optional = false
@@ -126,6 +127,14 @@ requests = ">=2.28.1,<3.0.0"
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "typing-extensions"
+version = "4.3.0"
+description = "Backported and Experimental Type Hints for Python 3.7+"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
@@ -145,8 +154,8 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.10"
-content-hash = "449066db8d3c7007128c8d5ba6279e3998c4b5d2e0bb632fdd664a8582f540be"
+python-versions = "^3.8"
+content-hash = "042220e829b9e87d8a83cb876327b40842564adbd10886300f7726156b4de6fd"
 
 [metadata.files]
 black = [
@@ -211,12 +220,16 @@ requests = [
     {file = "requests-2.28.1.tar.gz", hash = "sha256:7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983"},
 ]
 slack-hooks = [
-    {file = "slack-hooks-0.3.0.tar.gz", hash = "sha256:86a4001dc2e9bcb271bae8c99e1483aab773cd9ac56d6cd06fcec3392a6e06b8"},
-    {file = "slack_hooks-0.3.0-py3-none-any.whl", hash = "sha256:a641ce117d307efee86cfe0d59174c8236cfe90cea0bc6171fa0ea858cb6e57a"},
+    {file = "slack-hooks-0.4.0.tar.gz", hash = "sha256:3b0bea8e9534ba393a34fe26657ac8a55f7703654ba79a8e02c054810100af39"},
+    {file = "slack_hooks-0.4.0-py3-none-any.whl", hash = "sha256:6df0aff898e53854aae7d3a0b776f8ca0c3935e36f91fcf0a7317d92580bbc26"},
 ]
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
+]
+typing-extensions = [
+    {file = "typing_extensions-4.3.0-py3-none-any.whl", hash = "sha256:25642c956049920a5aa49edcdd6ab1e06d7e5d467fc00e0506c44ac86fbfca02"},
+    {file = "typing_extensions-4.3.0.tar.gz", hash = "sha256:e6d2677a32f47fc7eb2795db1dd15c1f34eff616bcaf2cfb5e997f854fa1c4a6"},
 ]
 urllib3 = [
     {file = "urllib3-1.26.12-py2.py3-none-any.whl", hash = "sha256:b930dd878d5a8afb066a637fbb35144fe7901e3b209d1cd4f524bd0e9deee997"},
