@@ -1,74 +1,92 @@
-import os
-import requests
+from slackhooks.blocks.accessory import ButtonAccessory
+from slackhooks.blocks.context import Context
+from slackhooks.blocks.element import ImageElement, PlainTextElement
+from slackhooks.blocks.section import Section
+from slackhooks.blocks.text import MarkdownText, PlainText
+from slackhooks.client import Message
 
-SUMMARY_FORMAT = "{name}: new version {version} was released by {user}."
-TEXT_FORMAT = "*{name}*: new version _{version}_ was released by {user}."
+from actions import github, params
 
-GITHUB_URL_FORMAT = "https://github.com/{repository}/releases/tag/{version}"
-PYPI_URL_FORMAT = "https://pypi.org/project/{project_name}/"
-    
+
+class Project:
+    def __init__(
+        self,
+        github_repository: str,
+        github_ref: str,
+        github_user: str,
+        pypi_project: str = None,
+    ):
+        self.user = github_user
+        self.name = github_repository.split("/")[-1]
+        self.pypi_project = pypi_project
+        self.repository = github_repository
+        self.version = github_ref.split("/")[-1]
+
+    @property
+    def title_markdown(self):
+        return f"*{self.name.upper()}*: new version _{self.version}_ was released!"
+
+    @property
+    def title_plain_text(self):
+        return f"{self.name.upper()}: new version {self.version} was released by {self.user}!"
+
+    @property
+    def emoji(self):
+        if self.pypi_project:
+            return "pypi"
+
+        return "github"
+
+    @property
+    def user_image_url(self):
+        return f"https://github.com/{self.user}.png"
+
+    @property
+    def url(self):
+        if self.pypi_project:
+            return f"https://pypi.org/project/{self.pypi_project}/"
+
+        return f"https://github.com/{self.repository}/releases/tag/{self.version}"
+
 
 def main():
-    slack_webhook_url = os.environ["INPUT_SLACK_WEBHOOK_URL"]
-    pypi_project_name = os.environ["INPUT_PYPI_PROJECT_NAME"]
-    
-    github_repository = os.environ["GITHUB_REPOSITORY"]
-    github_ref = os.environ["GITHUB_REF"]
-    github_actor = os.environ["GITHUB_ACTOR"]
+    project = Project(
+        github_repository=github.repository,
+        github_ref=github.ref,
+        github_user=github.actor,
+        pypi_project=params.pypi_project_name,
+    )
 
-    project_name = github_repository.split("/")[-1]
-    project_version = github_ref.split("/")[-1]
+    message = Message(
+        text=project.title_plain_text,
+        blocks=[
+            Section(
+                text=MarkdownText(
+                    text=project.title_markdown,
+                ),
+                accessory=ButtonAccessory(
+                    text=PlainText(
+                        text=f":{project.emoji}: {project.version}",
+                    ),
+                    value="releases",
+                    action_id="button-action",
+                    url=project.url,
+                ),
+            ),
+            Context(
+                elements=[
+                    ImageElement(
+                        image_url=project.user_image_url,
+                    ),
+                    PlainTextElement(
+                        text=f"by {project.user}",
+                    ),
+                ]
+            ),
+        ],
+    )
 
-    summary = SUMMARY_FORMAT.format(
-        name=project_name.upper(), 
-        version=project_version, 
-        user=github_actor,
-    )
-    
-    text = TEXT_FORMAT.format(
-        name=project_name.upper(), 
-        version=project_version, 
-        user=github_actor,
-    )
-    
-    if pypi_project_name:
-        emoji = "pypi"
-        url = PYPI_URL_FORMAT.format(
-            project_name=pypi_project_name,
-        )
-    else:
-        emoji = "github"
-        url = GITHUB_URL_FORMAT.format(
-            repository=github_repository, 
-            version=project_version,
-        )
-    
-    requests.post(
-        slack_webhook_url,
-        json={
-            "text": summary,
-            "blocks": [
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": text,
-                    },
-                    "accessory": {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "text": f":{emoji}: {project_version}",
-                            "emoji": True,
-                        },
-                        "value": "releases",
-                        "url": url,
-                        "action_id": "button-action",
-                    },
-                }
-            ]
-        },
-    )
+    message.send(params.slack_webhook_url)
 
 
 if __name__ == "__main__":

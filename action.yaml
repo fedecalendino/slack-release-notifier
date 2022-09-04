@@ -1,6 +1,6 @@
 name: "Slack Release Notifier"
 author: "Fede Calendino"
-description: "Notify a slack channel about a new release"
+description: "Notify a slack channel about a new release."
 inputs:
   slack_webhook_url:
     description: "URL provided by Slack's Incoming WebHooks app."
