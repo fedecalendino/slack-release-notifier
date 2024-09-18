@@ -5,13 +5,13 @@ inputs:
   slack_webhook_url:
     description: "URL provided by Slack's Incoming WebHooks app."
     required: true
-  button_text:
+  slack_button_text:
     description: "Alternative text to display on the button."
     required: false
-  button_url:
+  slack_button_url:
     description: "Alternative url to open when the button is clicked."
     required: false
-  button_emoji:
+  slack_button_emoji:
     description: "Alternative emoji to display on the button."
     required: false
 runs:

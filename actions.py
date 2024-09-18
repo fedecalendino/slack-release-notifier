@@ -24,18 +24,18 @@ class PARAMS:
     assert slack_webhook_url, "SLACK_WEBHOOK_URL is not set"
 
     button_text = os.getenv(
-        "INPUT_BUTTON_TEXT",
+        "INPUT_SLACK_BUTTON_TEXT",
         default=GITHUB.version,
     )
 
     button_url = os.getenv(
-        "INPUT_BUTTON_URL",
+        "INPUT_SLACK_BUTTON_URL",
         default=GITHUB.url,
     )
 
     button_emoji = (
         os.getenv(
-            "INPUT_BUTTON_EMOJI",
+            "INPUT_SLACK_BUTTON_EMOJI",
             default="github",
         )
         .strip()
