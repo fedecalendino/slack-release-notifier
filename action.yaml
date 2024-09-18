@@ -7,15 +7,12 @@ inputs:
     required: true
   button_text:
     description: "Alternative text to display on the button."
-    default: "{TAG_NAME}"
     required: false
   button_url:
     description: "Alternative url to open when the button is clicked."
-    default: "https://github.com/{ORGANIZATION}/{REPOSITORY}/releases/tag/{TAG_NAME}"
     required: false
   button_emoji:
     description: "Alternative emoji to display on the button."
-    default: ":github:"
     required: false
 runs:
   using: "docker"
