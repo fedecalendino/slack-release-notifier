@@ -2,8 +2,14 @@
 
 Simple action to notify a slack channel after a new version of a project has been released.
 
+### Requirements
 
-### Usage
+To be able to send the notification, a webhook url needs to be provided. You can get one by installing the app [Incoming WebHooks](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) into your slack workspace.
+
+
+## Default Usage
+
+![default configuration](/img/custom.png)
 
 workflow.yml
 ```yml
@@ -24,16 +30,36 @@ jobs:
       id: slack
       with:
         slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      uses: fedecalendino/slack-release-notifier@v1.2.1
+      uses: fedecalendino/slack-release-notifier@v3.0.0
 ```
 
+## Custom Usage
 
-### SetUp
+![custom configuration](/img/custom.png)
 
-To be able to send the notification, a webhook url needs to be provided. You can get one by installing the app [Incoming WebHooks](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) into your slack workspace.
+workflow.yml
+```yml
+name: Release
 
+on:
+  release:
+    types:
+      - created
 
-### Result
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
 
-![Slack Notificator](/img/screenshot.png)
+    steps:
+    - name: Notify Slack
+      id: slack
+      with:
+        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        button_text: "open in pypi"
+        button_url: "https://pypi.com"
+        button_emoji: ":pypi:"
+      uses: fedecalendino/slack-release-notifier@v3.0.0
+```
+
 

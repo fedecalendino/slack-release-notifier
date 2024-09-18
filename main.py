@@ -1,92 +1,59 @@
-from slackhooks.blocks.accessory import ButtonAccessory
-from slackhooks.blocks.context import Context
-from slackhooks.blocks.element import ImageElement, PlainTextElement
-from slackhooks.blocks.section import Section
-from slackhooks.blocks.text import MarkdownText, PlainText
-from slackhooks.client import Message
+from uuid import uuid4
 
-from actions import github, params
+import requests
+from slackblocks import (
+    WebhookMessage,
+    SectionBlock,
+    Button,
+    ContextBlock,
+    Image,
+    Text,
+    ResponseType,
+)
 
-
-class Project:
-    def __init__(
-        self,
-        github_repository: str,
-        github_ref: str,
-        github_user: str,
-        pypi_project: str = None,
-    ):
-        self.user = github_user
-        self.name = github_repository.split("/")[-1]
-        self.pypi_project = pypi_project
-        self.repository = github_repository
-        self.version = github_ref.split("/")[-1]
-
-    @property
-    def title_markdown(self):
-        return f"*{self.name.upper()}*: new version _{self.version}_ was released!"
-
-    @property
-    def title_plain_text(self):
-        return f"{self.name.upper()}: new version {self.version} was released by {self.user}!"
-
-    @property
-    def emoji(self):
-        if self.pypi_project:
-            return "pypi"
-
-        return "github"
-
-    @property
-    def user_image_url(self):
-        return f"https://github.com/{self.user}.png"
-
-    @property
-    def url(self):
-        if self.pypi_project:
-            return f"https://pypi.org/project/{self.pypi_project}/"
-
-        return f"https://github.com/{self.repository}/releases/tag/{self.version}"
+from actions import GITHUB, PARAMS
 
 
 def main():
-    project = Project(
-        github_repository=github.repository,
-        github_ref=github.ref,
-        github_user=github.actor,
-        pypi_project=params.pypi_project_name,
-    )
+    title = f"*{GITHUB.name.upper()}*: new version _<{GITHUB.url}|{GITHUB.version}>_ was released!"
+    preview = f"{GITHUB.name.upper()}: new version {GITHUB.version} was released by {GITHUB.user_name}!"
 
-    message = Message(
-        text=project.title_plain_text,
+    message = WebhookMessage(
+        response_type=ResponseType.IN_CHANNEL,
+        text=preview,
         blocks=[
-            Section(
-                text=MarkdownText(
-                    text=project.title_markdown,
-                ),
-                accessory=ButtonAccessory(
-                    text=PlainText(
-                        text=f":{project.emoji}: {project.version}",
-                    ),
-                    value="releases",
-                    action_id="button-action",
-                    url=project.url,
+            SectionBlock(
+                text=title,
+                accessory=Button(
+                    text=f":{PARAMS.button_emoji}: {PARAMS.button_text}",
+                    url=PARAMS.button_url,
+                    action_id=str(uuid4()),
                 ),
             ),
-            Context(
+            ContextBlock(
                 elements=[
-                    ImageElement(
-                        image_url=project.user_image_url,
+                    Image(
+                        image_url=GITHUB.user_image_url,
                     ),
-                    PlainTextElement(
-                        text=f"by {project.user}",
+                    Text(
+                        text=f"by {GITHUB.user_name}",
                     ),
                 ]
             ),
         ],
     )
 
-    message.send(params.slack_webhook_url)
+    response = requests.post(
+        url=PARAMS.slack_webhook_url,
+        data=message.json(),
+    )
+
+    if response.status_code != 200:
+        raise Exception(
+            f"Failed to send message to Slack > {response.status_code} {response.text}"
+        )
+    else:
+        print(f"Message was sent successfully > {title}")
 
 
 if __name__ == "__main__":
