@@ -1,6 +1,7 @@
 from uuid import uuid4
 
-import requests
+import urllib.request
+import json
 from slackblocks import (
     WebhookMessage,
     SectionBlock,
@@ -43,17 +44,32 @@ def main():
         ],
     )
 
-    response = requests.post(
-        url=PARAMS.slack_webhook_url,
-        data=message.json(),
+    send(PARAMS.slack_webhook_url, message)
+
+
+def send(url: str, message: WebhookMessage):
+    data = message.json().encode("utf-8")
+
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={
+            "Content-Type": "application/json",
+        },
     )
 
-    if response.status_code != 200:
-        raise Exception(
-            f"Failed to send message to Slack > {response.status_code} {response.text}"
-        )
-    else:
-        print(f"Message was sent successfully > {title}")
+    try:
+        with urllib.request.urlopen(req) as response:
+            status_code = response.getcode()
+
+            if status_code != 200:
+                response = response.read().decode("utf-8")
+
+                raise Exception(f"Failed to send message to Slack > {status_code} {response}")
+            else:
+                print(f"Message was sent successfully > {message.text}")
+    except urllib.error.HTTPError as e:
+        raise Exception(f"Failed to send message to Slack > {e.code} {e.reason}")
 
 
 if __name__ == "__main__":
