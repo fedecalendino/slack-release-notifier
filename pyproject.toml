@@ -3,7 +3,7 @@ name = "slack-release-notifier"
 description = "Notify a slack channel about a new release."
 license = "MIT"
 readme = "README.md"
-version = "3.0.0"
+version = "3.0.1"
 
 authors = [
     "Fede Calendino <fede@calendino.com>"
