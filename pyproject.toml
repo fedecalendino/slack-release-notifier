@@ -3,14 +3,14 @@ name = "slack-release-notifier"
 description = "Notify a slack channel about a new release."
 license = "MIT"
 readme = "README.md"
-version = "3.0.1"
+version = "3.0.2"
 
 authors = [
     "Fede Calendino <fede@calendino.com>"
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 slackblocks = "^1.0.11"
 requests = "^2.32.3"
 

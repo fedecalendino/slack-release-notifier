@@ -30,7 +30,7 @@ jobs:
       id: slack
       with:
         slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-      uses: fedecalendino/slack-release-notifier@v3.0.1
+      uses: fedecalendino/slack-release-notifier@v3.0.2
 ```
 
 ## Custom Usage
@@ -59,7 +59,7 @@ jobs:
         button_text: "open in pypi"
         button_url: "https://pypi.com"
         button_emoji: ":pypi:"
-      uses: fedecalendino/slack-release-notifier@v3.0.1
+      uses: fedecalendino/slack-release-notifier@v3.0.2
 ```
 
 
