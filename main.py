@@ -1,7 +1,6 @@
+import urllib.request
 from uuid import uuid4
 
-import urllib.request
-import json
 from slackblocks import (
     WebhookMessage,
     SectionBlock,
